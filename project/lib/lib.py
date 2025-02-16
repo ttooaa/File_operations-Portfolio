@@ -1,6 +1,10 @@
 import os
 import re
 import shutil
+from project.lib.history import OperationHistory
+
+# グローバルな履歴管理インスタンスを作成
+history = OperationHistory()
 
 def rename_files(directory, pattern, replacement, preview=False):
     """
@@ -41,6 +45,8 @@ def rename_files(directory, pattern, replacement, preview=False):
         try:
             shutil.move(src, dst)
             print(f"変更: {old_name} -> {new_name}")
+            # 操作履歴を記録する
+            history.record(old_name, new_name)
         except Exception as e:
             print(f"エラー: {old_name} の変更に失敗しました。詳細: {e}")
     print("ファイル名の変更が完了しました。")
